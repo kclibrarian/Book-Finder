@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Component, useState } from "react";
 import Modal from "./Modal";
 
 export interface Book {
@@ -10,7 +10,8 @@ export interface Book {
   isbn: string;
   cover: string;
 }
-const Snippet = (book: Book): JSX.Element =>  {
+
+export function Snippet(book: Book): JSX.Element {
   const [modalActive, setModalActive] = useState(false);
 
   return (
@@ -42,4 +43,4 @@ const Snippet = (book: Book): JSX.Element =>  {
   );
 }
 
-export default Snippet;
+export default Snippet as Component;

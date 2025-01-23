@@ -1,7 +1,7 @@
 import "./App.css";
 import { Button, FormGroup, TextField, Typography } from "@mui/material";
 import React, { useState, useEffect } from 'react';
-import Snippet, { Book } from "./Component/Snippet";
+import  { Book, Snippet } from "./Component/Snippet";
 
 export function App() {
   const [error, setError] = useState(null);
@@ -9,14 +9,12 @@ export function App() {
   const [isbnInput, setIsbnInput] = useState<string>("");
   const [books, setBooks] = useState<Book[]>([])
 
-
-    // fetch
-    const apiUrl = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbnInput}&jscmd=details&format=json`
-  
     useEffect(() => {
       let controller = new AbortController()
-
-      async function fetchApi() {
+      // fetch
+      const apiUrl = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbnInput}&jscmd=details&format=json`
+    
+      async function fetchApi(apiUrl: string) {
         try {
             const response = await fetch(apiUrl, {
                 signal: controller.signal,
@@ -29,8 +27,16 @@ export function App() {
             } else {
                 throw error
             }
+        }}
+        fetchApi(apiUrl);
+        // if (loadMoreButton) {
+        //     loadMoreButton.style.display = 'block'
+        // }
+
+        return () => {
+            controller.abort()
         }
-    }
+    }, [isbnInput])
 
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
@@ -40,7 +46,6 @@ export function App() {
         //   setError(error);
         //   console.log(error);
         // }
-  }, []);
 
   function handleSubmit(event) {
     setIsbnInput(isbnInput)
@@ -67,7 +72,7 @@ export function App() {
             }
           );
     console.log( 'ISBN:', isbnInput); 
-}
+    }
   return (
     <div className="App">
       <header className="App-header">
@@ -120,3 +125,4 @@ export function App() {
 }
 
 export default App;
+
